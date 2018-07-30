@@ -16,54 +16,28 @@ public class ImageDownloader {
     public static Image getImage(String n){
         Image image=new Image("Unknown.png");
         StringBuilder name=new StringBuilder(n);
-        if(!n.matches(".*\\d+.*")){
-            int blue = name.indexOf("Blueprint");
-            if(blue>0){
-                name.delete(blue-1,name.length()-1);
+
+        URL url = null;
+        Scanner s = null;
+        try {
+            url = new URL(BASE_ADDRESS+n);
+            s = new Scanner(url.openStream());
+        } catch (MalformedURLException e) {
+            System.out.println("PROBLEM WITH CONNECTION TO THE TRACKER SITE");
+        } catch (IOException e) {
+            System.out.println("PROBLEM WITH READING THE INFO FROM TRACKER SITE");
+        }
+        if (s != null) {
+            StringBuilder informations = new StringBuilder();
+            while (s.hasNextLine()) {
+                informations.append(s.nextLine().replace('"', ' ') + '\n');
             }
-            name=new StringBuilder(name.toString().replace(' ','_'));
-            System.out.println(BASE_ADDRESS+name);
-            URL url = null;
-            Scanner s = null;
+            String thumb = "<div class= floatright ><a href= ";
             try {
-                url = new URL(BASE_ADDRESS+name);
-                s = new Scanner(url.openStream());
-            } catch (MalformedURLException e) {
-                System.err.println("PROBLEM WITH CONNECTION TO THE TRACKER SITE");
-            } catch (IOException e) {
-                System.err.println("PROBLEM WITH READING THE INFO FROM TRACKER SITE");
+                image = new Image(informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length())));
+            } catch (IllegalArgumentException e) {
+                System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
             }
-            if (s != null) {
-                StringBuilder informations = new StringBuilder();
-                while (s.hasNextLine()) {
-                    informations.append(s.nextLine().replace('"', ' ') + '\n');
-                }
-                System.out.println(informations);
-            }
-        }else{
-            Scanner currency=new Scanner(n);
-            currency.nextInt();
-            URL url = null;
-            Scanner s = null;
-            try {
-                url = new URL(BASE_ADDRESS+currency.next());
-                s = new Scanner(url.openStream());
-            } catch (MalformedURLException e) {
-                System.err.println("PROBLEM WITH CONNECTION TO THE TRACKER SITE");
-            } catch (IOException e) {
-                System.err.println("PROBLEM WITH READING THE INFO FROM TRACKER SITE");
-            }
-            if (s != null) {
-                StringBuilder informations = new StringBuilder();
-                while (s.hasNextLine()) {
-                    informations.append(s.nextLine().replace('"', ' ') + '\n');
-                }
-
-                String thumb="<div class= floatright ><a href= ";
-                image=new Image(informations.substring(informations.indexOf(thumb)+thumb.length(),informations.indexOf(" ",informations.indexOf(thumb)+thumb.length())));
-            }
-
-
         }
 
         image=SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);

@@ -3,22 +3,25 @@ package Tracker;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
-import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
 public class Alert {
-    public final String FONT_FAMILY="https://fonts.googleapis.com/css?family=Do+Hyeon";
-    
+    public final String FONT_FAMILY = "https://fonts.googleapis.com/css?family=Do+Hyeon";
+
     public int width = 600;
-    public int height = 150;
+    public int height = 190;
     public int offset = 5;
+    public int imageW = 120;
+    public int imageH = 150;
+    public int imageOff= 10;
     public long startTime;
     public long endTime;
     public String cash;
-    public String prize;
+    public int prizeNumber;
+    public String prizeName;
     public String localization;
     public String type;
     public String enemy;
@@ -42,8 +45,8 @@ public class Alert {
 
     public void draw(GraphicsContext g, int index) {
         g.setFill(Color.DARKGRAY);
-        int x = (Main.WIDTH - width) / 2;
-        int y = (100 + (height + offset) * index);
+        double x = (Main.WIDTH - width) / 2;
+        double y = (offset + (height + offset) * index) + 30;
         g.fillRect(x, y, width, height);
 
         g.setFill(Color.WHITE);
@@ -65,16 +68,31 @@ public class Alert {
 
         g.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
         g.fillText(cash, x + 250, y + 70);
-        if (prize != null) {
-            Image prizeIm=ImageDownloader.getImage(prize);
-            double h=prizeIm.getHeight();
-            double w=prizeIm.getWidth();
-            if(h>height){
-                double scale=(height-30)/h;
-                h*=scale;
-                w*=scale;
+        if (prizeName != null) {
+            Image prizeIm = ImageDownloader.getImage(prizeName);
+            double h = prizeIm.getHeight();
+            double w = prizeIm.getWidth();
+            if (h > (imageH-imageOff)) {
+                double scale = (imageH-imageOff) / h;
+                h *= scale;
+                w *= scale;
             }
-            g.drawImage(prizeIm,x+width-w-50,y+height/2-h/2,w,h);
+            if (w > (imageW-imageOff)) {
+                double scale = (imageW-imageOff) / w;
+                h *= scale;
+                w *= scale;
+            }
+            double strokeX = x + width - imageW - 50;
+            double strokeY = y + height / 2 - imageH / 2;
+            g.setFont(Font.font(FONT_FAMILY, 15));
+            if (prizeNumber != 0) {
+                g.fillText(prizeNumber + "x " + prizeName, strokeX, strokeY - 5);
+            } else {
+                g.fillText(prizeName, strokeX, strokeY - 5);
+            }
+            g.setLineWidth(3);
+            g.strokeRoundRect(strokeX, strokeY, imageW, imageH,15,15);
+            g.drawImage(prizeIm, strokeX + imageW / 2 - w / 2, strokeY + imageH / 2 - h / 2, w, h);
         }
     }
 
@@ -96,26 +114,32 @@ public class Alert {
         s.skip("  style= background-color:blue; >");
         StringBuilder p = new StringBuilder();
         String n;
+        if (s.hasNextInt()) {
+            prizeNumber = s.nextInt();
+        }
         while (!(n = s.next()).contains("</span>")) {
             p.append(n + " ");
         }
         p.append(n.substring(0, n.indexOf("</span>")));
-        prize = new String(p);
+        prizeName = new String(p);
     }
 
     private void parseLocalization(Scanner s) {
         StringBuilder l = new StringBuilder();
-        if (prize == null) {
-            l.append(s.next().substring(1));
+        if (prizeName == null) {
+            l.append(s.next().substring(1) + " ");
         } else {
             s.skip(" class= alert-node >");
             l.append(s.next());
         }
         String n;
         while (!(n = s.next()).contains("</span>")) {
-            l.append(n);
+            l.append(n + " ");
         }
         l.append(n.substring(0, n.indexOf("</span>")));
+        if (l.charAt(l.indexOf("(") - 1) != ' ') {
+            l.insert(l.indexOf("("), ' ');
+        }
         localization = new String(l);
     }
 

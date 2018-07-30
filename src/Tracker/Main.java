@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -18,13 +19,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane root = new Pane();
+        ScrollPane root = new ScrollPane();
+        root.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        root.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Scene scene = new Scene(root, WIDTH, HEIGHT);
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        Canvas canvas = new Canvas(WIDTH, HEIGHT*1.5);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        root.getChildren().add(canvas);
+        root.setContent(canvas);
         gc.setFill(Color.GRAY);
-        gc.fillRect(0,0,WIDTH,HEIGHT);
+        gc.fillRect(0,0,WIDTH-1,HEIGHT*1.5);
         for(int i=0;i<alerts.size();i++){
             alerts.get(i).draw(gc,i);
         }
