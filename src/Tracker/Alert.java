@@ -11,11 +11,11 @@ import java.util.Scanner;
 public class Alert {
     public final String FONT_FAMILY = "https://fonts.googleapis.com/css?family=Do+Hyeon";
 
-    public int width = 600;
-    public int height = 190;
+    public int width = 700;
+    public int height = 280;
     public int offset = 5;
-    public int imageW = 120;
-    public int imageH = 150;
+    public int imageW = 200;
+    public int imageH = 240;
     public int imageOff= 10;
     public long startTime;
     public long endTime;
@@ -64,10 +64,10 @@ public class Alert {
         g.fillText(level, x + 20, y + 130);
 
         g.setFont(Font.font(FONT_FAMILY, 20));
-        g.fillText("CREDITS", x + 250, y + 40);
+        g.fillText("CREDITS", x + 300, y + 40);
 
         g.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
-        g.fillText(cash, x + 250, y + 70);
+        g.fillText(cash, x + 300, y + 70);
         if (prizeName != null) {
             Image prizeIm = ImageDownloader.getImage(prizeName);
             double h = prizeIm.getHeight();

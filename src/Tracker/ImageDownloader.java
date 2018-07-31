@@ -13,67 +13,85 @@ import java.util.Scanner;
 public class ImageDownloader {
     private static final String BASE_ADDRESS = "http://warframe.wikia.com/wiki/";
 
+    /**
+     * Tries to get image of given object.
+     * In case of failure, returns image of question mark.
+     *
+     * @param n name of the object
+     * @return if image was found, then image of the object is returned; if it wasn't found, image of question mark is returned
+     */
+
     public static Image getImage(String n) {
         Image image = new Image("Unknown.png");
         Scanner s = null;
         StringBuilder informations;
         String imageLink = null;
+        if (n.contains("Blueprint")) {
+            n = n.substring(0, n.indexOf("Blueprint") - 1);
+        }
         try {
             s = new Scanner(new URL(getLink(n)).openStream());
         } catch (MalformedURLException e) {
-            System.out.println("PROBLEM WITH CONNECTION TO THE TRACKER SITE");
+            System.out.println("PROBLEM WITH CONNECTION TO THE WIKI SITE");
+            System.out.println(getLink(n));
         } catch (IOException e) {
-            System.out.println("PROBLEM WITH READING THE INFO FROM TRACKER SITE");
+            System.out.println("PROBLEM WITH READING THE INFO FROM WIKI SITE");
+            System.out.println(getLink(n));
         }
-        if(s!=null){
+        if (s != null) {
             informations = new StringBuilder();
             while (s.hasNextLine()) {
                 informations.append(s.nextLine().replace('"', ' ') + '\n');
             }
-        }else{
-            return image;
-        }
-        if(isComponent(n)){
-            if(s!=null){
-                String thumb= "<figure class= pi-item pi-image >\n" +
-                              "\t\t\t\t<a href= ";
-                imageLink=informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
+            informations = new StringBuilder(informations.toString().replace("\t", ""));
+            String thumb;
+            if (isElement(n, "Component") || isElement(n, "Mod")) {
+                thumb = "<figure class= pi-item pi-image >\n" +
+                        "<a href= ";
+            } else if (n.equals("Endo")) {
+                thumb = "<div class= floatright ><a href= ";
+            } else {
+                thumb = "<div class= floatnone ><a href= ";
             }
-        }else{
-            if (s != null) {
-                String thumb = "<div class= floatright ><a href= ";
-                imageLink=informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
+            imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
+            try {
+                image = new Image(imageLink);
+            } catch (IllegalArgumentException e) {
+                System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
+                System.out.println(imageLink);
+            } catch (NullPointerException e) {
+                System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
             }
+            image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
         }
-        try {
-            image = new Image(imageLink);
-        } catch (IllegalArgumentException e) {
-            System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
-        } catch (NullPointerException e){
-            System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
-        }
-        image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
         return image;
     }
 
-    public static String getLink(String name){
-        return BASE_ADDRESS+name;
+    /**
+     * Generates link to wiki article about given object.
+     *
+     * @param name the name of object
+     * @return link to the wiki article as a String
+     */
+
+    public static String getLink(String name) {
+        return BASE_ADDRESS + new Scanner(name).nextLine().replace(' ', '_');
     }
 
-    private static boolean isComponent(String n){
-        BufferedReader components;
+    private static boolean isElement(String n, String elementType) {
+        BufferedReader elements;
         try {
-            components=new BufferedReader(new FileReader(new File("Components")));
+            elements = new BufferedReader(new FileReader(new File(elementType + "s")));
             String c;
-            while ((c = components.readLine())!=null) {
-                if(c.equals(n)){
+            while ((c = elements.readLine()) != null) {
+                if (c.equals(n)) {
                     return true;
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("COULDN'T FIND FILE WITH LIST OF COMPONENTS");
+            System.out.println("COULDN'T FIND FILE WITH LIST OF " + elementType.toUpperCase() + "S");
         } catch (IOException e) {
-            System.out.println("COULDN'T READ FILE WITH LIST OF COMPONENTS");
+            System.out.println("COULDN'T READ FILE WITH LIST OF " + elementType.toUpperCase() + "S");
         }
 
         return false;
