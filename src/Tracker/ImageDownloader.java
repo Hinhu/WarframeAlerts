@@ -26,45 +26,91 @@ public class ImageDownloader {
         Scanner s = null;
         StringBuilder informations;
         String imageLink = null;
-        if (n.contains("Blueprint")) {
-            n = n.substring(0, n.indexOf("Blueprint") - 1);
-        }
-        try {
-            s = new Scanner(new URL(getLink(n)).openStream());
-        } catch (MalformedURLException e) {
-            System.out.println("PROBLEM WITH CONNECTION TO THE WIKI SITE");
-            System.out.println(getLink(n));
-        } catch (IOException e) {
-            System.out.println("PROBLEM WITH READING THE INFO FROM WIKI SITE");
-            System.out.println(getLink(n));
-        }
-        if (s != null) {
-            informations = new StringBuilder();
-            while (s.hasNextLine()) {
-                informations.append(s.nextLine().replace('"', ' ') + '\n');
+        if (!n.contains("Blueprint")) {
+            try {
+                s = new Scanner(new URL(getLink(n)).openStream());
+            } catch (MalformedURLException e) {
+                System.out.println("PROBLEM WITH CONNECTION TO THE WIKI SITE");
+                System.out.println(getLink(n));
+            } catch (IOException e) {
+                System.out.println("PROBLEM WITH READING THE INFO FROM WIKI SITE");
+                System.out.println(getLink(n));
             }
-            informations = new StringBuilder(informations.toString().replace("\t", ""));
-            String thumb;
-            if (isElement(n, "Component") || isElement(n, "Mod")) {
+            if(s!=null) {
+                informations = new StringBuilder();
+                while (s.hasNextLine()) {
+                    informations.append(s.nextLine().replace('"', ' ') + '\n');
+                }
+                informations = new StringBuilder(informations.toString().replace("\t", ""));
+                String thumb;
+                if (n.equals("Endo")) {
+                    thumb = "<div class= floatright ><a href= ";
+                } else {
+                    thumb = "<figure class= pi-item pi-image >\n" +
+                            "<a href= ";
+                }
+                imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
+                try {
+                    image = new Image(imageLink);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
+                    System.out.println(imageLink);
+                } catch (NullPointerException e) {
+                    System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
+                }
+                image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
+            }
+        }else{
+            try {
+                s = new Scanner(new URL(getSearchLink(n)).openStream());
+            } catch (MalformedURLException e) {
+                System.out.println("PROBLEM WITH CONNECTION TO ECOSIA");
+                System.out.println(getSearchLink(n));
+            } catch (IOException e) {
+                System.out.println("PROBLEM WITH READING THE INFO FROM ECOSIA");
+                System.out.println(getSearchLink(n));
+            }
+            if(s!=null){
+                StringBuilder searchHTML = new StringBuilder();
+                while (s.hasNextLine()) {
+                    searchHTML.append(s.nextLine().replace('"', ' ') + '\n');
+                }
+                searchHTML = new StringBuilder(searchHTML.toString().replace("\t", ""));
+                String thumb="<a class= result-title js-result-title  href= ";
+                String wikiLink=searchHTML.substring(searchHTML.indexOf(thumb) + thumb.length(), searchHTML.indexOf(" ", searchHTML.indexOf(thumb) + thumb.length()));
+                try {
+                    s = new Scanner(new URL(wikiLink).openStream());
+                } catch (MalformedURLException e) {
+                    System.out.println("PROBLEM WITH CONNECTION TO ECOSIA");
+                    System.out.println(getLink(n));
+                } catch (IOException e) {
+                    System.out.println("PROBLEM WITH READING THE INFO FROM ECOSIA");
+                    System.out.println(getLink(n));
+                }
+                informations = new StringBuilder();
+                while (s.hasNextLine()) {
+                    informations.append(s.nextLine().replace('"', ' ') + '\n');
+                }
+                informations = new StringBuilder(informations.toString().replace("\t", ""));
                 thumb = "<figure class= pi-item pi-image >\n" +
                         "<a href= ";
-            } else if (n.equals("Endo")) {
-                thumb = "<div class= floatright ><a href= ";
-            } else {
-                thumb = "<div class= floatnone ><a href= ";
+                imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
+                try {
+                    image = new Image(imageLink);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
+                    System.out.println(imageLink);
+                } catch (NullPointerException e) {
+                    System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
+                }
+                image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
             }
-            imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
-            try {
-                image = new Image(imageLink);
-            } catch (IllegalArgumentException e) {
-                System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
-                System.out.println(imageLink);
-            } catch (NullPointerException e) {
-                System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
-            }
-            image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
         }
         return image;
+    }
+
+    private static String getSearchLink(String name) {
+        return "https://www.ecosia.org/search?q=Warframe+"+new Scanner(name).nextLine().replace(' ', '+');
     }
 
     /**
