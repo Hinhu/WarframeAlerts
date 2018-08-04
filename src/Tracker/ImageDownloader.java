@@ -21,8 +21,8 @@ public class ImageDownloader {
      * @return if image was found, then image of the object is returned; if it wasn't found, image of question mark is returned
      */
 
-    public static Image getImage(String n) {
-        Image image = new Image("Unknown.png");
+    public static AlertImage getImage(String n) {
+        AlertImage image = new AlertImage("Unknown.png",BASE_ADDRESS);
         Scanner s = null;
         StringBuilder informations;
         String imageLink = null;
@@ -51,14 +51,13 @@ public class ImageDownloader {
                 }
                 imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
                 try {
-                    image = new Image(imageLink);
+                    image = new AlertImage(imageLink,getLink(n));
                 } catch (IllegalArgumentException e) {
                     System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
                     System.out.println(imageLink);
                 } catch (NullPointerException e) {
                     System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
                 }
-                image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
             }
         }else{
             try {
@@ -96,14 +95,13 @@ public class ImageDownloader {
                         "<a href= ";
                 imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
                 try {
-                    image = new Image(imageLink);
+                    image = new AlertImage(imageLink,wikiLink);
                 } catch (IllegalArgumentException e) {
                     System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
                     System.out.println(imageLink);
                 } catch (NullPointerException e) {
                     System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
                 }
-                image = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(image, null)), null);
             }
         }
         return image;
@@ -143,57 +141,4 @@ public class ImageDownloader {
         return false;
     }
 
-    private static BufferedImage trimImage(BufferedImage image) {
-        WritableRaster raster = image.getAlphaRaster();
-        int width = raster.getWidth();
-        int height = raster.getHeight();
-        int left = 0;
-        int top = 0;
-        int right = width - 1;
-        int bottom = height - 1;
-        int minRight = width - 1;
-        int minBottom = height - 1;
-
-        top:
-        for (; top < bottom; top++) {
-            for (int x = 0; x < width; x++) {
-                if (raster.getSample(x, top, 0) != 0) {
-                    minRight = x;
-                    minBottom = top;
-                    break top;
-                }
-            }
-        }
-
-        left:
-        for (; left < minRight; left++) {
-            for (int y = height - 1; y > top; y--) {
-                if (raster.getSample(left, y, 0) != 0) {
-                    minBottom = y;
-                    break left;
-                }
-            }
-        }
-
-        bottom:
-        for (; bottom > minBottom; bottom--) {
-            for (int x = width - 1; x >= left; x--) {
-                if (raster.getSample(x, bottom, 0) != 0) {
-                    minRight = x;
-                    break bottom;
-                }
-            }
-        }
-
-        right:
-        for (; right > minRight; right--) {
-            for (int y = bottom; y >= top; y--) {
-                if (raster.getSample(right, y, 0) != 0) {
-                    break right;
-                }
-            }
-        }
-
-        return image.getSubimage(left, top, right - left + 1, bottom - top + 1);
-    }
 }

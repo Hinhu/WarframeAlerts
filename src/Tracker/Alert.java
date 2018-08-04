@@ -1,22 +1,29 @@
 package Tracker;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
+import java.util.Date;
 import java.util.Scanner;
 
 public class Alert {
     public final String FONT_FAMILY = "https://fonts.googleapis.com/css?family=Do+Hyeon";
 
     public int width = 700;
-    public int height = 280;
+    public static int height = 280;
     public int offset = 5;
     public int imageW = 200;
-    public int imageH = 240;
-    public int imageOff= 10;
+    public int imageH = 230;
+    public int imageOff = 10;
     public long startTime;
     public long endTime;
     public String cash;
@@ -42,60 +49,6 @@ public class Alert {
         parseEnemy(s);
         parseLevel(s);
     }
-
-    public void draw(GraphicsContext g, int index) {
-        g.setFill(Color.DARKGRAY);
-        double x = (Main.WIDTH - width) / 2;
-        double y = (offset + (height + offset) * index) + 30;
-        g.fillRect(x, y, width, height);
-
-        g.setFill(Color.WHITE);
-
-        g.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
-        g.fillText(type, x + 20, y + 40);
-
-        g.setFont(Font.font(FONT_FAMILY, 16));
-        g.fillText(localization, x + 30, y + 70);
-
-        g.setFont(Font.font(FONT_FAMILY, 14));
-        g.fillText(enemy, x + 30, y + 90);
-
-        g.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 25));
-        g.fillText(level, x + 20, y + 130);
-
-        g.setFont(Font.font(FONT_FAMILY, 20));
-        g.fillText("CREDITS", x + 300, y + 40);
-
-        g.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
-        g.fillText(cash, x + 300, y + 70);
-        if (prizeName != null) {
-            Image prizeIm = ImageDownloader.getImage(prizeName);
-            double h = prizeIm.getHeight();
-            double w = prizeIm.getWidth();
-            if (h > (imageH-imageOff)) {
-                double scale = (imageH-imageOff) / h;
-                h *= scale;
-                w *= scale;
-            }
-            if (w > (imageW-imageOff)) {
-                double scale = (imageW-imageOff) / w;
-                h *= scale;
-                w *= scale;
-            }
-            double strokeX = x + width - imageW - 50;
-            double strokeY = y + height / 2 - imageH / 2;
-            g.setFont(Font.font(FONT_FAMILY, 15));
-            if (prizeNumber != 0) {
-                g.fillText(prizeNumber + "x " + prizeName, strokeX, strokeY - 5);
-            } else {
-                g.fillText(prizeName, strokeX, strokeY - 5);
-            }
-            g.setLineWidth(3);
-            g.strokeRoundRect(strokeX, strokeY, imageW, imageH,15,15);
-            g.drawImage(prizeIm, strokeX + imageW / 2 - w / 2, strokeY + imageH / 2 - h / 2, w, h);
-        }
-    }
-
 
     private void parseTime(Scanner s) {
         startTime = s.nextLong();
@@ -167,5 +120,66 @@ public class Alert {
     private void parseLevel(Scanner s) {
         s.next();
         level = s.nextLine().substring(1);
+    }
+
+    public void addToRoot(Pane root, int index) {
+        double x = (Main.WIDTH - width) / 2;
+        double y = (offset + (height + offset) * index) + 100;
+
+        Rectangle background = new Rectangle(x, y, width, height);
+        background.setFill(Color.DARKGRAY);
+
+        Text missionType = new Text(x + 0.15 * height, y + 0.15 * height, type.toUpperCase());
+        missionType.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
+        missionType.setFill(Color.WHITE);
+
+        Text missionLoc = new Text(missionType.getX(), missionType.getY()+ 0.15 * height, localization);
+        missionLoc.setFont(Font.font(FONT_FAMILY, 16));
+        missionLoc.setFill(Color.WHITE);
+
+        Text missionEnemy = new Text(missionLoc.getX(), missionLoc.getY()+ 0.1 * height, enemy);
+        missionEnemy.setFont(Font.font(FONT_FAMILY, 16));
+        missionEnemy.setFill(Color.WHITE);
+
+        Text missionLevel = new Text(missionEnemy.getX(), missionEnemy.getY()+ 0.15 * height, level);
+        missionLevel.setFont(Font.font(FONT_FAMILY,FontWeight.BOLD,18));
+        missionLevel.setFill(Color.WHITE);
+
+        root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel);
+
+        if(prizeName!=null) {
+            Rectangle frame= new Rectangle(x+0.9*width-imageW,y+height*0.5-imageH*0.5,imageW,imageH);
+            frame.setFill(Color.TRANSPARENT);
+            frame.setArcHeight(15);
+            frame.setArcWidth(15);
+            frame.setStroke(Color.BLACK);
+            frame.setStrokeWidth(3);
+
+            ImageView prizeImage = ImageDownloader.getImage(prizeName).getAlertImage();
+
+            if(prizeImage.getImage().getHeight()>(imageH-imageOff)){
+                double scale = (frame.getHeight()-imageOff) / prizeImage.getImage().getHeight();
+                prizeImage.setFitHeight(prizeImage.getImage().getHeight()*scale);
+                prizeImage.setFitWidth(prizeImage.getImage().getWidth()*scale);
+                System.out.println("RESIZE " + scale);
+            }
+
+            if(prizeImage.getImage().getWidth()>(imageW-imageOff)){
+                double scale = (frame.getWidth()-imageOff) / prizeImage.getImage().getWidth();
+                prizeImage.setFitHeight(prizeImage.getImage().getHeight()*scale);
+                prizeImage.setFitWidth(prizeImage.getImage().getWidth()*scale);
+                System.out.println("RESIZE " + scale);
+            }
+
+            prizeImage.setTranslateX(frame.getX()+frame.getWidth()/2-prizeImage.getFitWidth()/2);
+            prizeImage.setTranslateY(frame.getY()+frame.getHeight()/2-prizeImage.getFitHeight()/2);
+
+            Text prizeInfo = new Text(frame.getX(), frame.getY()-frame.getStrokeWidth()-3, prizeName);
+            prizeInfo.setFont(Font.font(FONT_FAMILY, 14));
+            prizeInfo.setFill(Color.WHITE);
+
+            System.out.println(prizeImage.getFitWidth()+" "+prizeImage.getFitHeight());
+            root.getChildren().addAll(frame,prizeImage,prizeInfo);
+        }
     }
 }
