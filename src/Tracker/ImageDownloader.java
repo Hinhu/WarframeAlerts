@@ -18,11 +18,13 @@ public class ImageDownloader {
      * In case of failure, returns image of question mark.
      *
      * @param n name of the object
+     * @param maxW maximal width of image
+     * @param maxH maximal height of image
      * @return if image was found, then image of the object is returned; if it wasn't found, image of question mark is returned
      */
 
-    public static AlertImage getImage(String n) {
-        AlertImage image = new AlertImage("Unknown.png",BASE_ADDRESS);
+    public static AlertImage getImage(String n, double maxW, double maxH) {
+        AlertImage image = new AlertImage("Unknown.png",BASE_ADDRESS,maxW,maxH);
         Scanner s = null;
         StringBuilder informations;
         String imageLink = null;
@@ -51,7 +53,7 @@ public class ImageDownloader {
                 }
                 imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
                 try {
-                    image = new AlertImage(imageLink,getLink(n));
+                    image = new AlertImage(imageLink,getLink(n),maxW,maxH);
                 } catch (IllegalArgumentException e) {
                     System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
                     System.out.println(imageLink);
@@ -95,7 +97,7 @@ public class ImageDownloader {
                         "<a href= ";
                 imageLink = informations.substring(informations.indexOf(thumb) + thumb.length(), informations.indexOf(" ", informations.indexOf(thumb) + thumb.length()));
                 try {
-                    image = new AlertImage(imageLink,wikiLink);
+                    image = new AlertImage(imageLink,wikiLink,maxW,maxH);
                 } catch (IllegalArgumentException e) {
                     System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
                     System.out.println(imageLink);

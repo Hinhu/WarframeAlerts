@@ -145,7 +145,11 @@ public class Alert {
         missionLevel.setFont(Font.font(FONT_FAMILY,FontWeight.BOLD,18));
         missionLevel.setFill(Color.WHITE);
 
-        root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel);
+        Text missionCash = new Text(x+width/2-50, missionType.getY(), "CREDITS:\n"+cash);
+        missionCash.setFont(Font.font(FONT_FAMILY,FontWeight.BOLD,20));
+        missionCash.setFill(Color.WHITE);
+
+        root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel, missionCash);
 
         if(prizeName!=null) {
             Rectangle frame= new Rectangle(x+0.9*width-imageW,y+height*0.5-imageH*0.5,imageW,imageH);
@@ -155,24 +159,10 @@ public class Alert {
             frame.setStroke(Color.BLACK);
             frame.setStrokeWidth(3);
 
-            ImageView prizeImage = ImageDownloader.getImage(prizeName).getAlertImage();
+            ImageView prizeImage = ImageDownloader.getImage(prizeName,imageW-imageOff,imageH-imageOff).getAlertImage();
 
-            if(prizeImage.getImage().getHeight()>(imageH-imageOff)){
-                double scale = (frame.getHeight()-imageOff) / prizeImage.getImage().getHeight();
-                prizeImage.setFitHeight(prizeImage.getImage().getHeight()*scale);
-                prizeImage.setFitWidth(prizeImage.getImage().getWidth()*scale);
-                System.out.println("RESIZE " + scale);
-            }
-
-            if(prizeImage.getImage().getWidth()>(imageW-imageOff)){
-                double scale = (frame.getWidth()-imageOff) / prizeImage.getImage().getWidth();
-                prizeImage.setFitHeight(prizeImage.getImage().getHeight()*scale);
-                prizeImage.setFitWidth(prizeImage.getImage().getWidth()*scale);
-                System.out.println("RESIZE " + scale);
-            }
-
-            prizeImage.setTranslateX(frame.getX()+frame.getWidth()/2-prizeImage.getFitWidth()/2);
-            prizeImage.setTranslateY(frame.getY()+frame.getHeight()/2-prizeImage.getFitHeight()/2);
+            prizeImage.setTranslateX(frame.getX()+frame.getWidth()/2-prizeImage.getImage().getWidth()/2);
+            prizeImage.setTranslateY(frame.getY()+frame.getHeight()/2-prizeImage.getImage().getHeight()/2);
 
             Text prizeInfo = new Text(frame.getX(), frame.getY()-frame.getStrokeWidth()-3, prizeName);
             prizeInfo.setFont(Font.font(FONT_FAMILY, 14));
