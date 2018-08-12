@@ -238,10 +238,17 @@ public class Alert {
     }
 
     private String getFormattedTime() {
+        if(timeLeft<0){
+            return "Expired";
+        }
         int hours = timeLeft / 3600;
         int minutes = (timeLeft % 3600) / 60;
         int seconds = (timeLeft % 3600) % 60;
 
         return hours + "h " + minutes + "m " + seconds + "s";
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
     }
 }

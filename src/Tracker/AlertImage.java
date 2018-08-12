@@ -1,11 +1,9 @@
 package Tracker;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,7 +15,7 @@ import java.net.URISyntaxException;
 
 public class AlertImage {
     private ImageView alertImage;
-
+    private boolean isClicked;
 
 
     public AlertImage(String imageUrl, String wikiLink, double maxW, double maxH) {
@@ -33,7 +31,7 @@ public class AlertImage {
         im.delete();
         alertImage=new ImageView(alertIm);
         alertImage.setOnMouseClicked((MouseEvent event) -> {
-            if (Desktop.isDesktopSupported()) {
+            if (Desktop.isDesktopSupported() && !isClicked) {
                 try {
                     Desktop.getDesktop().browse(new URI(wikiLink));
                 } catch (IOException e) {
@@ -41,6 +39,8 @@ public class AlertImage {
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
+
+                isClicked=true;
             }
         });
     }
