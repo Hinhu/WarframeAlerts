@@ -35,12 +35,12 @@ public class EventDownloader {
         }
     }
 
-    public ArrayList<Alert> getAlerts() {
+    public Alerts getAlerts() {
         ArrayList<Alert> alerts = new ArrayList<>();
         for (String a : alertsInfo) {
             alerts.add(new Alert(a));
         }
-        return alerts;
+        return new Alerts(alerts);
     }
 
     public void printAlerts() {
