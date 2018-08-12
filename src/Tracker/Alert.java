@@ -24,8 +24,7 @@ public class Alert {
     public int imageW = 200;
     public int imageH = 230;
     public int imageOff = 10;
-    public long startTime;
-    public long endTime;
+    public int timeLeft;
     public String cash;
     public int prizeNumber;
     public String prizeName;
@@ -51,9 +50,12 @@ public class Alert {
     }
 
     private void parseTime(Scanner s) {
-        startTime = s.nextLong();
+        s.nextLong();
         s.next();
-        endTime = s.nextLong();
+        long endTime = s.nextLong();
+        long currentTime = System.currentTimeMillis() / 1000;
+        timeLeft = (int) (endTime - currentTime);
+        System.out.println(currentTime + "\t" + endTime + "\t" + (endTime - currentTime));
     }
 
     private void parseCash(Scanner s) {
@@ -133,43 +135,64 @@ public class Alert {
         missionType.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
         missionType.setFill(Color.WHITE);
 
-        Text missionLoc = new Text(missionType.getX(), missionType.getY()+ 0.15 * height, localization);
+        Text missionLoc = new Text(missionType.getX(), missionType.getY() + 0.15 * height, localization);
         missionLoc.setFont(Font.font(FONT_FAMILY, 16));
         missionLoc.setFill(Color.WHITE);
 
-        Text missionEnemy = new Text(missionLoc.getX(), missionLoc.getY()+ 0.1 * height, enemy);
+        Text missionEnemy = new Text(missionLoc.getX(), missionLoc.getY() + 0.1 * height, enemy);
         missionEnemy.setFont(Font.font(FONT_FAMILY, 16));
         missionEnemy.setFill(Color.WHITE);
 
-        Text missionLevel = new Text(missionEnemy.getX(), missionEnemy.getY()+ 0.15 * height, level);
-        missionLevel.setFont(Font.font(FONT_FAMILY,FontWeight.BOLD,18));
+        Text missionLevel = new Text(missionEnemy.getX(), missionEnemy.getY() + 0.15 * height, level);
+        missionLevel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 18));
         missionLevel.setFill(Color.WHITE);
 
-        Text missionCash = new Text(x+width/2-50, missionType.getY(), "CREDITS:\n"+cash);
-        missionCash.setFont(Font.font(FONT_FAMILY,FontWeight.BOLD,20));
+        Text missionTime = new Text(missionLevel.getX(), missionLevel.getY() + 0.2 * height, getFormattedTime());
+        missionTime.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
+        missionTime.setFill(Color.WHITE);
+
+        Text missionCash = new Text(x + width / 2 - 50, missionType.getY(), "CREDITS:\n" + cash);
+        missionCash.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 20));
         missionCash.setFill(Color.WHITE);
 
-        root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel, missionCash);
+        root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel, missionTime, missionCash);
 
-        if(prizeName!=null) {
-            Rectangle frame= new Rectangle(x+0.9*width-imageW,y+height*0.5-imageH*0.5,imageW,imageH);
+        if (prizeName != null) {
+            Rectangle frame = new Rectangle(x + 0.9 * width - imageW, y + height * 0.5 - imageH * 0.5, imageW, imageH);
             frame.setFill(Color.TRANSPARENT);
             frame.setArcHeight(15);
             frame.setArcWidth(15);
             frame.setStroke(Color.BLACK);
             frame.setStrokeWidth(3);
 
-            ImageView prizeImage = ImageDownloader.getImage(prizeName,imageW-imageOff,imageH-imageOff).getAlertImage();
+            ImageView prizeImage = ImageDownloader.getImage(prizeName, imageW - imageOff, imageH - imageOff).getAlertImage();
 
-            prizeImage.setTranslateX(frame.getX()+frame.getWidth()/2-prizeImage.getImage().getWidth()/2);
-            prizeImage.setTranslateY(frame.getY()+frame.getHeight()/2-prizeImage.getImage().getHeight()/2);
+            prizeImage.setTranslateX(frame.getX() + frame.getWidth() / 2 - prizeImage.getImage().getWidth() / 2);
+            prizeImage.setTranslateY(frame.getY() + frame.getHeight() / 2 - prizeImage.getImage().getHeight() / 2);
 
-            Text prizeInfo = new Text(frame.getX(), frame.getY()-frame.getStrokeWidth()-3, prizeName);
-            prizeInfo.setFont(Font.font(FONT_FAMILY, 14));
-            prizeInfo.setFill(Color.WHITE);
+            Text prizeTitle = new Text(frame.getX(), frame.getY() - frame.getStrokeWidth() - 3, prizeName);
+            prizeTitle.setFont(Font.font(FONT_FAMILY, 14));
+            prizeTitle.setFill(Color.WHITE);
 
-            System.out.println(prizeImage.getFitWidth()+" "+prizeImage.getFitHeight());
-            root.getChildren().addAll(frame,prizeImage,prizeInfo);
+            root.getChildren().addAll(frame, prizeImage, prizeTitle);
+
+            if (prizeNumber != 0) {
+                Text prizeQuantity = new Text(prizeNumber + "x");
+                prizeQuantity.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 18));
+                prizeQuantity.setFill(Color.WHITE);
+                prizeQuantity.setX(frame.getX() - prizeQuantity.getLayoutBounds().getWidth() - 5);
+                prizeQuantity.setY(frame.getY() + frame.getHeight() / 2 - 9);
+
+                root.getChildren().add(prizeQuantity);
+            }
         }
+    }
+
+    private String getFormattedTime() {
+        int hours = timeLeft / 3600;
+        int minutes = (timeLeft % 3600) / 60;
+        int seconds = (timeLeft % 3600) % 60;
+
+        return hours + "h " + minutes + "m " + seconds + "s";
     }
 }
