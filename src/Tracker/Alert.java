@@ -55,6 +55,9 @@ public class Alert {
         long currentTime = System.currentTimeMillis() / 1000;
         timeLeft = (int) (endTime - currentTime);
         missionTime.setText(getFormattedTime());
+        if(timeLeft<300){
+            missionTime.setFill(Color.RED);
+        }
     }
 
     private void parseTime(Scanner s) {
