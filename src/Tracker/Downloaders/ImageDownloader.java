@@ -1,10 +1,7 @@
-package Tracker;
+package Tracker.Downloaders;
 
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
+import Tracker.Alert.AlertImage;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,18 +1,15 @@
-package Tracker;
+package Tracker.Alert;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
+import Tracker.Downloaders.ImageDownloader;
+import Tracker.Main;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.util.Date;
 import java.util.Scanner;
 
 public class Alert {
@@ -55,7 +52,7 @@ public class Alert {
         long currentTime = System.currentTimeMillis() / 1000;
         timeLeft = (int) (endTime - currentTime);
         missionTime.setText(getFormattedTime());
-        if(timeLeft<300){
+        if (timeLeft < 300) {
             missionTime.setFill(Color.RED);
         }
     }
@@ -155,7 +152,7 @@ public class Alert {
         root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel, missionTime, missionCash);
 
         if (prizeName != null) {
-            createPrizeImageFrame(x + 0.9 * width - imageW, y + height * 0.5 - imageH * 0.5, root);
+            createPrizeImageFrame(x + 0.95 * width - imageW, y + height * 0.5 - imageH * 0.5, root);
         }
     }
 
@@ -238,7 +235,7 @@ public class Alert {
     }
 
     private String getFormattedTime() {
-        if(timeLeft<0){
+        if (timeLeft < 0) {
             return "Expired";
         }
         int hours = timeLeft / 3600;

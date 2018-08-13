@@ -1,4 +1,7 @@
-package Tracker;
+package Tracker.Downloaders;
+
+import Tracker.Alert.Alert;
+import Tracker.Alert.Alerts;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

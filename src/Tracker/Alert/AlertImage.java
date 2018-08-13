@@ -1,9 +1,10 @@
-package Tracker;
+package Tracker.Alert;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,17 +20,17 @@ public class AlertImage {
 
 
     public AlertImage(String imageUrl, String wikiLink, double maxW, double maxH) {
-        Image alertIm=new Image(imageUrl);
+        Image alertIm = new Image(imageUrl);
         alertIm = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(alertIm, null)), null);
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(alertIm, null), "png", new File("tmp.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        alertIm=new Image("tmp.png",maxW,maxH,true,true);
-        File im=new File("tmp.png");
+        alertIm = new Image("tmp.png", maxW, maxH, true, true);
+        File im = new File("tmp.png");
         im.delete();
-        alertImage=new ImageView(alertIm);
+        alertImage = new ImageView(alertIm);
         alertImage.setOnMouseClicked((MouseEvent event) -> {
             if (Desktop.isDesktopSupported() && !isClicked) {
                 try {
@@ -40,7 +41,7 @@ public class AlertImage {
                     e.printStackTrace();
                 }
 
-                isClicked=true;
+                isClicked = true;
             }
         });
     }
