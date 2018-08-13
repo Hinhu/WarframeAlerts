@@ -32,12 +32,6 @@ public class EventDownloader {
         readAlerts(s);
     }
 
-    public void printInformations() {
-        if (informations != null) {
-            System.out.println(informations);
-        }
-    }
-
     public Alerts getAlerts() {
         ArrayList<Alert> alerts = new ArrayList<>();
         for (String a : alertsInfo) {

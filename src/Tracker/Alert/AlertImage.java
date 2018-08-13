@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -20,16 +21,27 @@ public class AlertImage {
 
 
     public AlertImage(String imageUrl, String wikiLink, double maxW, double maxH) {
-        Image alertIm = new Image(imageUrl);
-        alertIm = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(alertIm, null)), null);
+        Image alertIm = null;
         try {
-            ImageIO.write(SwingFXUtils.fromFXImage(alertIm, null), "png", new File("tmp.png"));
+            alertIm = new Image(imageUrl);
+        } catch (IllegalArgumentException e) {
+            System.err.println("COULDN'T OPEN IMAGE FROM URL: " + imageUrl);
+        }
+
+        alertIm = SwingFXUtils.toFXImage(trimImage(SwingFXUtils.fromFXImage(alertIm, null)), null);
+        File tmp=null;
+        try {
+            tmp=new File("tmp.png");
+            ImageIO.write(SwingFXUtils.fromFXImage(alertIm, null), "png", tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        alertIm = new Image("tmp.png", maxW, maxH, true, true);
-        File im = new File("tmp.png");
-        im.delete();
+        try {
+            alertIm = new Image(tmp.toURI().toURL().toExternalForm(), maxW, maxH, true, true);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        tmp.delete();
         alertImage = new ImageView(alertIm);
         alertImage.setOnMouseClicked((MouseEvent event) -> {
             if (Desktop.isDesktopSupported() && !isClicked) {
@@ -38,6 +50,7 @@ public class AlertImage {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (URISyntaxException e) {
+                    System.out.println(wikiLink);
                     e.printStackTrace();
                 }
 

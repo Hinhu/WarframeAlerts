@@ -97,7 +97,6 @@ public class ImageDownloader {
                     image = new AlertImage(imageLink,wikiLink,maxW,maxH);
                 } catch (IllegalArgumentException e) {
                     System.out.println("COULDN'T PARSE THE IMAGE FROM WIKI PAGE");
-                    System.out.println(imageLink);
                 } catch (NullPointerException e) {
                     System.out.println("COULDN'T RECOGNIZE TYPE OF PRIZE");
                 }
@@ -121,23 +120,5 @@ public class ImageDownloader {
         return BASE_ADDRESS + new Scanner(name).nextLine().replace(' ', '_');
     }
 
-    private static boolean isElement(String n, String elementType) {
-        BufferedReader elements;
-        try {
-            elements = new BufferedReader(new FileReader(new File(elementType + "s")));
-            String c;
-            while ((c = elements.readLine()) != null) {
-                if (c.equals(n)) {
-                    return true;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("COULDN'T FIND FILE WITH LIST OF " + elementType.toUpperCase() + "S");
-        } catch (IOException e) {
-            System.out.println("COULDN'T READ FILE WITH LIST OF " + elementType.toUpperCase() + "S");
-        }
-
-        return false;
-    }
 
 }
