@@ -1,53 +1,57 @@
 Earth
-    Cambria
-    Cervantes
-    E Prime
-    Erpo
-    Eurasia
-    Everest
-    Gaia
-    Lith
-    Mantle
-    Mariana
-    Pacific
-    Coba
-    Tikal
-    Oro
+	Cambria
+	Cervantes
+	E Prime
+	Erpo
+	Eurasia
+	Everest
+	Gaia
+	Lith
+	Mantle
+	Mariana
+	Pacific
+	Coba
+	Tikal
+	Oro
+END
 Mercury
-    Apollodorus
-    Boethius
-    Caloris
-    Elion
-    Lares
-    M Prime
-    Odin
-    Pantheon
-    Suisei
-    Terminus
-    Tolstoj
+	Apollodorus
+	Boethius
+	Caloris
+	Elion
+	Lares
+	M Prime
+	Odin
+	Pantheon
+	Suisei
+	Terminus
+	Tolstoj
+END
 Venus
-    Aphrodite
-    Cytherean
-    E Gate
-    Ishtar
-    Kiliken
-    Linea
-    Malva
-    Montes
-    Romula
-    Tessera
-    Unda
-    Venera
-    V Prime
-    Fossa
+	Aphrodite
+	Cytherean
+	E Gate
+	Ishtar
+	Kiliken
+	Linea
+	Malva
+	Montes
+	Romula
+	Tessera
+	Unda
+	Venera
+	V Prime
+	Fossa
+END
 Lua
-    Copernicus
-    Grimaldi
-    Pavlov
-    Plato
-    Stöfler
-    Tycho
-    Zeipel
+	Copernicus
+	Grimaldi
+	Pavlov
+	Plato
+	Stöfler
+	Tycho
+	Zeipel
+END
 Mars
 	Alator
 	Ara
@@ -66,6 +70,7 @@ Mars
 	Vallis
 	Wahiba
 	War
+END
 Phobos
 	Roche
 	Sharpless
@@ -78,6 +83,7 @@ Phobos
 	Stickney
 	Zeugma
 	Iliad
+END
 Ceres
 	Bode
 	Casta
@@ -93,6 +99,7 @@ Ceres
 	Seimeni
 	Thon
 	Exta
+END
 Jupiter
 	Adrastea
 	Amalthea
@@ -108,6 +115,7 @@ Jupiter
 	Cameria
 	Sinai
 	Themisto
+END
 Europa
 	Abaddon
 	Armaros
@@ -123,82 +131,88 @@ Europa
 	Cholistan
 	Larzac
 	Naamah
+END
 Saturn
-    Anthe
-    Calypso
-    Caracol
-    Cassini
-    Dione
-    Enceladus
-    Helene
-    Keeler
-    Numa
-    Pandora
-    Piscinas
-    Rhea
-    Telesto
-    Titan
-    Tethys
+	Anthe
+	Calypso
+	Caracol
+	Cassini
+	Dione
+	Enceladus
+	Helene
+	Keeler
+	Numa
+	Pandora
+	Piscinas
+	Rhea
+	Telesto
+	Titan
+	Tethys
+END
 Uranus
-    Ariel
-    Assur
-    Caelus
-    Caliban
-    Cressida
-    Desdemona
-    Ophelia
-    Puck
-    Rosalind
-    Stephano
-    Sycorax
-    Umbriel
-    Ur
-    Titania
+	Ariel
+	Assur
+	Caelus
+	Caliban
+	Cressida
+	Desdemona
+	Ophelia
+	Puck
+	Rosalind
+	Stephano
+	Sycorax
+	Umbriel
+	Ur
+	Titania
+
 Neptun
-    Despina
-    Galatea
-    Kelashin
-    Laomedeia
-    Larissa
-    Nereid
-    Neso
-    Proteus
-    Salacia
-    Sao
-    Triton
-    Yursa
-    Psamathe
+	Despina
+	Galatea
+	Kelashin
+	Laomedeia
+	Larissa
+	Nereid
+	Neso
+	Proteus
+	Salacia
+	Sao
+	Triton
+	Yursa
+	Psamathe
+END
 Pluto
-    Acheron
-    Cerberus
-    Cypress
-    Hydra
-    Minthe
-    Narcissus
-    Oceanum
-    Outer Terminus
-    Palus
-    Regna
-    Hieracon
-    Sechura
-    Hades
+	Acheron
+	Cerberus
+	Cypress
+	Hydra
+	Minthe
+	Narcissus
+	Oceanum
+	Outer Terminus
+	Palus
+	Regna
+	Hieracon
+	Sechura
+	Hades
+END
 Sedna
-    Naga
-    Berehynia
-    Hydron
-    Selkie
-    Adaro
-    Rusalka
-    Kappa
-    Marid
-    Charybdis
-    Amarna
-    Sangeru
-    Kelpie
-    Nakki
-    Yam
-    Vadyanoi
-    Merrow
+	Naga
+	Berehynia
+	Hydron
+	Selkie
+	Adaro
+	Rusalka
+	Kappa
+	Marid
+	Charybdis
+	Amarna
+	Sangeru
+	Kelpie
+	Nakki
+	Yam
+	Vadyanoi
+	Merrow
+END
 Kuva Fortress
 	Dakata
 	Garus
@@ -208,6 +222,7 @@ Kuva Fortress
 	Rotuma
 	Tamu
 	Taveuni
+END
 Eris
 	Brugia
 	Isos
@@ -220,6 +235,7 @@ Eris
 	Xini
 	Akkad
 	Zabala
+END
 Void
 	Teshub
 	Hepit
@@ -234,3 +250,4 @@ Void
 	Marduk
 	Mithra
 	Mot
+END

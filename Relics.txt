@@ -1,4 +1,0 @@
-VoidT1  Lith
-VoidT2  Mese
-VoidT3  Neo
-VoidT4  Axi

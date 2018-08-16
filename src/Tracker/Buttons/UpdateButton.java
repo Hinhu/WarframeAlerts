@@ -24,7 +24,8 @@ public class UpdateButton extends Button {
         setOnMouseExited(event -> {
             setFont(Font.font("Arial",15));
         });
-        setTranslateX(screenW/2-new Text(getText()).getLayoutBounds().getWidth());
+        setWidth(100);
+        setTranslateX(screenW/2-getWidth()-5);
         setTranslateY(50-getHeight()/2);
     }
 
@@ -37,7 +38,6 @@ public class UpdateButton extends Button {
 
     public void update(Pane root, EventDownloader e, Alerts alerts){
         root.getChildren().clear();
-        root.getChildren().add(this);
         e.update();
         alerts.setAlerts(e.getAlerts().getAlerts());
         alerts.addToPane(root);

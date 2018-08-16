@@ -21,8 +21,10 @@ public class Alert {
     private int imageW = 200;
     private int imageH = 230;
     private int imageOff = 10;
+    private long startTime;
     private long endTime;
     private int timeLeft;
+    private int timeToStart;
     private Text missionTime;
     private String cash;
     private int prizeNumber;
@@ -31,6 +33,7 @@ public class Alert {
     private String type;
     private String enemy;
     private String level;
+
 
 
     public Alert(String a) {
@@ -51,18 +54,22 @@ public class Alert {
     public void updateTime() {
         long currentTime = System.currentTimeMillis() / 1000;
         timeLeft = (int) (endTime - currentTime);
+        timeToStart = (int) (startTime - currentTime);
         missionTime.setText(getFormattedTime());
         if (timeLeft < 300) {
             missionTime.setFill(Color.RED);
+        }else if(timeToStart>0){
+            missionTime.setFill(Color.ORANGE);
         }
     }
 
     private void parseTime(Scanner s) {
-        s.nextLong();
+        startTime=s.nextLong();
         s.next();
         endTime = s.nextLong();
         long currentTime = System.currentTimeMillis() / 1000;
         timeLeft = (int) (endTime - currentTime);
+        timeToStart = (int) (startTime - currentTime);
     }
 
     private void parseCash(Scanner s) {
@@ -147,7 +154,7 @@ public class Alert {
 
         createMissionTimeText(missionLevel.getX(), missionLevel.getY() + 0.2 * height);
 
-        Text missionCash = createMissionCashText(x + width / 2 - 50, missionType.getY());
+        Text missionCash = createMissionCashText(x + width / 2 - 50, missionType.getY()+missionType.getLayoutBounds().getHeight()+5);
 
         root.getChildren().addAll(background, missionType, missionLoc, missionEnemy, missionLevel, missionTime, missionCash);
 
@@ -177,10 +184,11 @@ public class Alert {
 
         if (prizeNumber != 0) {
             Text prizeQuantity = new Text(prizeNumber + "x");
-            prizeQuantity.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, 18));
+            int fontSize=22;
+            prizeQuantity.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, fontSize));
             prizeQuantity.setFill(Color.WHITE);
             prizeQuantity.setX(frame.getX() - prizeQuantity.getLayoutBounds().getWidth() - 5);
-            prizeQuantity.setY(frame.getY() + frame.getHeight() / 2 - 9);
+            prizeQuantity.setY(frame.getY() + frame.getHeight() / 2 - fontSize/2);
 
             root.getChildren().add(prizeQuantity);
         }
@@ -235,6 +243,12 @@ public class Alert {
     }
 
     private String getFormattedTime() {
+        if(timeToStart>0){
+            int minutes = (timeToStart % 3600) / 60;
+            int seconds = (timeToStart % 3600) % 60;
+
+            return "Will start in: "+ minutes + "m " + seconds + "s";
+        }
         if (timeLeft < 0) {
             return "Expired";
         }

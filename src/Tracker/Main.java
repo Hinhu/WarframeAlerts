@@ -1,6 +1,7 @@
 package Tracker;
 
 import Tracker.Alert.Alerts;
+import Tracker.Buttons.Switcher;
 import Tracker.Buttons.UpdateButton;
 import Tracker.Downloaders.EventDownloader;
 import javafx.animation.KeyFrame;
@@ -16,16 +17,20 @@ public class Main extends Application {
     public static final int WIDTH=800;
     public static final int HEIGHT=800;
 
-    Scene alertScreen;
+    Scene scene;
+
+    ScrollPane alertScroll;
+    ScrollPane configScroll;
+
     Pane alertPane=new Pane();
 
-    Scene configScreen;
     Pane configPane;
 
     Timeline timer;
 
     EventDownloader eventDownloader;
     private UpdateButton upadater;
+    private Switcher switcher;
 
     private static Alerts alerts;
 
@@ -35,26 +40,29 @@ public class Main extends Application {
         alerts= eventDownloader.getAlerts();
         alerts.addToPane(alertPane);
         upadater=new UpdateButton(WIDTH);
+        switcher=new Switcher(WIDTH,primaryStage);
         createAlertScreen();
         createConfigScreen();
         createTimer();
         initStage(primaryStage);
-        timer.play();
+        //timer.play();
+        switcher.setPanes(alertScroll,configScroll);
         upadater.update(alertPane,eventDownloader,alerts);
+        alertPane.getChildren().addAll(upadater,switcher);
     }
 
     private void createConfigScreen() {
-        ScrollPane scroll = createScroller();
+        configScroll=createScroller();
         configPane=new Pane();
         configPane.setMinWidth(WIDTH);
         configPane.setStyle("-fx-background-color: grey");
-        scroll.setContent(configPane);
-        configScreen = new Scene(scroll, WIDTH, HEIGHT);
+        configPane.getChildren().add(switcher);
+        configScroll.setContent(configPane);
     }
 
     private ScrollPane createScroller() {
         ScrollPane scroll = new ScrollPane();
-        scroll.setStyle("-fx-background: grey");
+        scroll.setStyle("-fx-background: black");
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return scroll;
@@ -62,9 +70,10 @@ public class Main extends Application {
 
 
     private void initStage(Stage primaryStage) {
+        scene=new Scene(alertScroll,WIDTH,HEIGHT);
         primaryStage.setTitle("Warframe Tracker");
         primaryStage.setResizable(false);
-        primaryStage.setScene(alertScreen);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -72,7 +81,7 @@ public class Main extends Application {
         KeyFrame frame = new KeyFrame(Duration.millis(1000), e -> {
             if(alerts.updateTime()){
                 alertPane.getChildren().clear();
-                alertPane.getChildren().add(upadater);
+                alertPane.getChildren().addAll(upadater,switcher);
                 alerts.addToPane(alertPane);
             }
         });
@@ -82,14 +91,12 @@ public class Main extends Application {
     }
 
     private void createAlertScreen() {
-        ScrollPane scroll = createScroller();
-        alertPane=new Pane();
+        alertScroll=createScroller();
         alertPane.setMinWidth(WIDTH);
         alertPane.setStyle("-fx-background-color: grey");
         upadater.setUpdatesToAlerts(alertPane,eventDownloader,alerts);
-        alertPane.getChildren().add(upadater);
-        scroll.setContent(alertPane);
-        alertScreen = new Scene(scroll, WIDTH, HEIGHT);
+        alertPane.getChildren().addAll(upadater,switcher);
+        alertScroll.setContent(alertPane);
     }
 
 
