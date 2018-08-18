@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class NodeReader {
-    private static final String NODE_FILE = "Nodes.txt";
+    public static final String NODE_FILE = "Nodes.txt";
 
     public static ArrayList<Planet> getPlanets() throws IOException {
         ArrayList<Planet> planets = new ArrayList<Planet>();
@@ -29,7 +29,6 @@ public class NodeReader {
                 planets.add(new Planet(planetName, nodes));
             }
         }
-        System.out.println(planets.size());
         return planets;
     }
 
