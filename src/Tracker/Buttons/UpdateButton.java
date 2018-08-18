@@ -2,6 +2,7 @@ package Tracker.Buttons;
 
 import Tracker.Alert.Alerts;
 import Tracker.Downloaders.EventDownloader;
+import Tracker.Panes.AlertPane;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -30,16 +31,15 @@ public class UpdateButton extends Button {
     }
 
 
-    public void setUpdatesToAlerts(Pane root, EventDownloader e, Alerts alerts){
+    public void setUpdatesToAlerts(AlertPane alertPane, EventDownloader e, Alerts alerts){
         setOnMouseClicked(event -> {
-            update(root,e,alerts);
+            update(alertPane,e,alerts);
         });
     }
 
-    public void update(Pane root, EventDownloader e, Alerts alerts){
-        root.getChildren().clear();
+    public void update(AlertPane alertPane, EventDownloader e, Alerts alerts){
         e.update();
         alerts.setAlerts(e.getAlerts().getAlerts());
-        alerts.addToPane(root);
+        alertPane.refresh(alerts);
     }
 }
