@@ -262,4 +262,11 @@ public class Alert {
     public int getTimeLeft() {
         return timeLeft;
     }
+
+    public String getPlanet(){
+        return localization.substring(localization.indexOf('(')+1,localization.indexOf(')'));
+    }
+    public String getNode(){
+        return localization.substring(0,localization.indexOf('(')-1);
+    }
 }

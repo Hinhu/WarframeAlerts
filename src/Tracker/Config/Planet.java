@@ -9,10 +9,13 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 
 public class Planet {
+
     private String name;
     private ArrayList<String> nodes;
+
     private CheckBox planetBox;
     private ArrayList<CheckBox> nodesBoxes;
+
     private double height;
     private double width;
 
@@ -21,40 +24,46 @@ public class Planet {
         this.nodes = nodes;
         nodesBoxes = new ArrayList<>();
         planetBox = new CheckBox(name);
-        planetBox.setFont(Font.font("Arial", FontWeight.BOLD,18));
-        planetBox.setOnMouseClicked(event -> {
-            if(planetBox.isSelected()) {
-                for (CheckBox c : nodesBoxes) {
+        getPlanetBox().setFont(Font.font("Arial", FontWeight.BOLD,18));
+        getPlanetBox().setOnMouseClicked(event -> {
+            if(getPlanetBox().isSelected()) {
+                for (CheckBox c : getNodesBoxes()) {
                     c.setSelected(true);
                 }
             }else{
-                for (CheckBox c : nodesBoxes) {
+                for (CheckBox c : getNodesBoxes()) {
                     c.setSelected(false);
                 }
             }
         });
         for (String n : nodes) {
-            nodesBoxes.add(new CheckBox(n));
+            CheckBox nodeBox=new CheckBox(n);
+            getNodesBoxes().add(nodeBox);
+            nodeBox.setOnMouseClicked(event -> {
+                if(nodeBox.isSelected()){
+                    planetBox.setSelected(true);
+                }
+            });
         }
     }
 
     public void addToPane(double x, double y, Pane root) {
-        root.getChildren().add(planetBox);
-        root.getChildren().addAll(nodesBoxes);
-        planetBox.setTranslateX(x);
-        planetBox.setTranslateY(y);
-        double max=new Text(planetBox.getText()).getLayoutBounds().getWidth();
-        double startPoint=planetBox.getTranslateY()+24;
-        for(int i=0;i<nodesBoxes.size();i++){
-            nodesBoxes.get(i).setTranslateX(x);
-            nodesBoxes.get(i).setTranslateY(startPoint+i*20+2);
-            double m=new Text(nodesBoxes.get(i).getText()).getLayoutBounds().getWidth();
+        root.getChildren().add(getPlanetBox());
+        root.getChildren().addAll(getNodesBoxes());
+        getPlanetBox().setTranslateX(x);
+        getPlanetBox().setTranslateY(y);
+        double max=new Text(getPlanetBox().getText()).getLayoutBounds().getWidth();
+        double startPoint= getPlanetBox().getTranslateY()+24;
+        for(int i = 0; i< getNodesBoxes().size(); i++){
+            getNodesBoxes().get(i).setTranslateX(x);
+            getNodesBoxes().get(i).setTranslateY(startPoint+i*20+2);
+            double m=new Text(getNodesBoxes().get(i).getText()).getLayoutBounds().getWidth();
             if(max<m){
                 max=m;
             }
         }
         this.width=max+100;
-        double y2=nodesBoxes.get(nodes.size()-1).getTranslateY()+nodesBoxes.get(0).getFont().getSize()+10;
+        double y2= getNodesBoxes().get(getNodes().size()-1).getTranslateY()+ getNodesBoxes().get(0).getFont().getSize()+10;
         this.height=y2-y;
     }
 
@@ -67,9 +76,15 @@ public class Planet {
     }
 
     public String toString() {
-        StringBuilder text = new StringBuilder(name + "\n");
-        for (String n : nodes) {
-            text.append("\t" + n + "\n");
+        StringBuilder text = new StringBuilder();
+        if(planetBox.isSelected()) {
+            text.append(name + "\n");
+            for (CheckBox c : nodesBoxes) {
+                if (c.isSelected()) {
+                    text.append("\t" + c.getText() + "\n");
+                }
+            }
+            text.append("END\n");
         }
         return text.toString();
     }
@@ -80,5 +95,13 @@ public class Planet {
 
     public double getWidth() {
         return width;
+    }
+
+    public CheckBox getPlanetBox() {
+        return planetBox;
+    }
+
+    public ArrayList<CheckBox> getNodesBoxes() {
+        return nodesBoxes;
     }
 }
