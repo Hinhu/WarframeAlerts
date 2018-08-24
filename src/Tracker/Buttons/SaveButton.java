@@ -5,7 +5,6 @@ import Tracker.Config.Planet;
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class SaveButton extends Button {
         setOnMouseExited(event -> {
             setFont(Font.font("Arial", 15));
         });
-        setWidth(100);
+        setMinWidth(150);
         setTranslateX(x);
         setTranslateY(y);
     }

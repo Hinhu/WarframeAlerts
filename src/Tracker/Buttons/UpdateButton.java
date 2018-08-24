@@ -4,15 +4,13 @@ import Tracker.Alert.Alerts;
 import Tracker.Downloaders.EventDownloader;
 import Tracker.Panes.AlertPane;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class UpdateButton extends Button {
 
 
-    public UpdateButton(double screenW){
+    public UpdateButton(double x,double y){
         super("REFRESH");
         setFont(Font.font("Arial",15));
         setStyle("-fx-background-color: #babdc4;" +
@@ -25,9 +23,9 @@ public class UpdateButton extends Button {
         setOnMouseExited(event -> {
             setFont(Font.font("Arial",15));
         });
-        setWidth(100);
-        setTranslateX(screenW/2-getWidth()-5);
-        setTranslateY(50-getHeight()/2);
+        setMinWidth(150);
+        setTranslateX(x);
+        setTranslateY(y);
     }
 
 

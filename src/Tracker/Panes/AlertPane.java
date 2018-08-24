@@ -28,9 +28,9 @@ public class AlertPane extends ScrollPane {
         getRoot().setStyle("-fx-background-color: grey");
         alerts.addToPane(root);
 
-        updater=new UpdateButton(Main.WIDTH);
+        updater=new UpdateButton(30,40);
         updater.setUpdatesToAlerts(this,eventDownloader,alerts);
-        switcher=new SwitchButton(Main.WIDTH,stage);
+        switcher=new SwitchButton(Main.WIDTH-180,40,stage);
 
         root.getChildren().addAll(updater, switcher);
         setContent(getRoot());

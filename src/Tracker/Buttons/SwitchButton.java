@@ -12,7 +12,7 @@ public class SwitchButton extends Button {
     private AlertPane alert;
     private ConfigPane config;
 
-    public SwitchButton(double screenW, Stage stage) {
+    public SwitchButton(double x, double y, Stage stage) {
         super();
 
         setFont(Font.font("Arial", 15));
@@ -22,7 +22,7 @@ public class SwitchButton extends Button {
         setOnMouseClicked(event -> {
             if (alert != null) {
                 stage.getScene().setRoot(alert);
-            }else {
+            } else {
                 stage.getScene().setRoot(config);
             }
         });
@@ -34,9 +34,9 @@ public class SwitchButton extends Button {
         setOnMouseExited(event -> {
             setFont(Font.font("Arial", 15));
         });
-        setWidth(100);
-        setTranslateX(screenW / 2 + getWidth() + 5);
-        setTranslateY(50 - getHeight() / 2);
+        setMinWidth(150);
+        setTranslateX(x);
+        setTranslateY(y);
     }
 
     public void setAlert(AlertPane alert) {

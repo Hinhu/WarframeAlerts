@@ -1,18 +1,15 @@
 package Tracker.Panes;
 
-import Tracker.Alert.Alerts;
 import Tracker.Buttons.SaveButton;
 import Tracker.Buttons.SwitchButton;
-import Tracker.Buttons.UpdateButton;
 import Tracker.Config.NodeReader;
 import Tracker.Config.Planet;
-import Tracker.Downloaders.EventDownloader;
 import Tracker.Main;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -51,14 +48,51 @@ public class ConfigPane extends ScrollPane {
             }
             root.setMinWidth(width+20);
             setCheckBoxesSelection(planets);
+
+            CheckBox checkAll=new CheckBox("Check all");
+            checkAll.setFont(Font.font("Arial", FontWeight.BOLD,20));
+            checkAll.setTranslateX(Main.WIDTH/2-70);
+            checkAll.setTranslateY(40);
+            ArrayList<Planet> finalPlanets = planets;
+            checkAll.setOnMouseClicked(event -> {
+                setPlanetsSelection(finalPlanets,checkAll.isSelected());
+            });
+            checkAll.setSelected(areAllPlanetsChecked(planets));
+            root.getChildren().add(checkAll);
         }
 
-        saver=new SaveButton(10,10,planets);
-        switcher = new SwitchButton(Main.WIDTH, stage);
+
+
+        saver=new SaveButton(30,40,planets);
+        switcher = new SwitchButton(Main.WIDTH-180,40, stage);
 
         root.getChildren().addAll(switcher,saver);
 
         setContent(root);
+    }
+
+    private boolean areAllPlanetsChecked(ArrayList<Planet> planets){
+        for(Planet p: planets){
+            if(p.getPlanetBox().isSelected()) {
+                for (CheckBox n : p.getNodesBoxes()) {
+                    if(!n.isSelected()){
+                        return false;
+                    }
+                }
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void setPlanetsSelection(ArrayList<Planet> planets,boolean selection){
+        for(Planet p: planets){
+            p.getPlanetBox().setSelected(selection);
+            for(CheckBox n:p.getNodesBoxes()){
+                n.setSelected(selection);
+            }
+        }
     }
 
     private void setCheckBoxesSelection(ArrayList<Planet> planets) {

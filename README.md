@@ -3,11 +3,9 @@
 This JavaFX app gets informations about events in Warframe from https://deathsnacks.com/wf/ and looks for info about event's prizes on http://warframe.wikia.com/wiki (during search, it sometimes uses https://www.ecosia.org/ search engine). Thanks to that user doesn't have to look for info about prize on his/her own.
 
 I am not owner of sites mentioned above. I am grateful to their creators for making such contribution to Warframe fanbase. 
-This project doesn't mean to exploit their work, it's just an app made by fellow Tenno for personal usage.
+This project doesn't mean to exploit their work, it's just an app made by fellow Tenno to help players in identifying alerts' prizes.
 
 # Usage
-
-I haven't finished the app yet, but it's usable.
 
 * Launching
   Download *WarframeTracker.jar* and *Config.txt* files. They should be together in the same directory..
@@ -37,6 +35,8 @@ I haven't finished the app yet, but it's usable.
   You can check planets and nodes, which you unlocked.
 
   If you check a planet, its child nodes will also be checked and vice versa.
+
+  You can also check (and uncheck) all planets using "Check All" check box.
 
   Save your choices by clicking "SAVE" button.
 
